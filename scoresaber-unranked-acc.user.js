@@ -5,8 +5,8 @@
 // @description  ScoreSaber Enhancements
 // @author       motzel
 // @icon         https://scoresaber.com/favicon-32x32.png
-// @updateURL    https://github.com/motzel/scoresaber-unranked-acc/raw/master/scoresaber-unranked-acc.js
-// @downloadURL  https://github.com/motzel/scoresaber-unranked-acc/raw/master/scoresaber-unranked-acc.js
+// @updateURL    https://github.com/motzel/scoresaber-unranked-acc/raw/master/scoresaber-unranked-acc.user.js
+// @downloadURL  https://github.com/motzel/scoresaber-unranked-acc/raw/master/scoresaber-unranked-acc.user.js
 // @supportURL   https://github.com/motzel/scoresaber-unranked-acc/issues
 // @match        https://scoresaber.com/u/*
 // @grant        unsafeWindow
