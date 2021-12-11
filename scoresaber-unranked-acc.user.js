@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ScoreSaber unranked ACC
 // @namespace    https://motzel.dev
-// @version      0.1
+// @version      0.2
 // @description  ScoreSaber Enhancements
 // @author       motzel
 // @icon         https://scoresaber.com/favicon-32x32.png
@@ -49,6 +49,41 @@
     const sort = match[3] === 'recent' ? 'recent' : 'top';
 
     return {playerId, page, sort};
+  }
+
+  function fallbackCopyTextToClipboard(text) {
+    const textArea = window.document.createElement("textarea");
+    textArea.value = text;
+
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+
+    window.document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      window.document.execCommand('copy');
+    } catch (err) {
+      console.error('Fallback: Oops, unable to copy to clipboard', err);
+    }
+
+    window.document.body.removeChild(textArea);
+  }
+
+  function copyToClipboard(text) {
+    window.navigator.permissions.query({name: 'clipboard-write'})
+      .then(result => {
+        if (result.state === 'granted' || result.state === 'prompt') {
+          window.navigator.clipboard.writeText(text);
+        } else {
+          fallbackCopyTextToClipboard(text);
+        }
+      })
+      .catch(() => fallbackCopyTextToClipboard(text))
+    ;
   }
 
   const getMaxScore = (blocks, maxScorePerBlock = 115) =>
@@ -142,19 +177,36 @@
         const imageMatch = songImage.src.match(/covers\/(.*?)\..*?$/);
         if (!imageMatch?.[1]?.length) return;
 
-        const scoreInfoChilds = [...el.querySelectorAll('.scoreInfo > div')];
-        if (scoreInfoChilds?.length !== 1) return;
-
-        // skip if acc stat is already added
-        if (scoreInfoChilds[0].querySelector('.stat.acc')) return;
-
         // check the hash to be sure
         const hash = imageMatch[1].toUpperCase();
         if (hash !== scores[idx]?.hash) return;
 
-        const acc = (scores[idx].baseScore / scores[idx].maxScore * 100) / (scores[idx]?.multiplier ?? 1);
+        const scoreInfoChilds = [...el.querySelectorAll('.scoreInfo > div')];
+
+        const lastEl = scoreInfoChilds?.[scoreInfoChilds?.length - 1];
+
+        if (!scoreInfoChilds?.length || lastEl.querySelector('.bsr')) return;
 
         const existingElClassName = scoreInfoChilds[0].className;
+
+        if (scores?.[idx]?.beatSaver?.id) {
+          const bsrBtn = window.document.createElement('span');
+          bsrBtn.title = `!bsr ${scores[idx].beatSaver.id}`;
+          bsrBtn.className = `stat clickable bsr ${existingElClassName}`;
+
+          const icon = window.document.createElement('i');
+          icon.className = 'fas fa-exclamation';
+          bsrBtn.append(icon);
+
+          lastEl.append(bsrBtn);
+
+          bsrBtn.addEventListener('click', () => copyToClipboard(bsrBtn.title));
+        }
+
+        // skip if acc stat is already added
+        if (scoreInfoChilds?.length !== 1 || scoreInfoChilds[0].querySelector('.stat.acc')) return;
+
+        const acc = (scores[idx].baseScore / scores[idx].maxScore * 100) / (scores[idx]?.multiplier ?? 1);
 
         const newSpanEl = window.document.createElement('span');
         newSpanEl.title = 'Accuracy';
