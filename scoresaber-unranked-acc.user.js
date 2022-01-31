@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ScoreSaber unranked ACC
 // @namespace    https://motzel.dev
-// @version      0.2
+// @version      0.3
 // @description  ScoreSaber Enhancements
 // @author       motzel
 // @icon         https://scoresaber.com/favicon-32x32.png
@@ -219,6 +219,7 @@
 
           const replayLink = window.document.createElement('a');
           replayLink.href = link;
+          replayLink.target = "_blank";
           replayLink.prepend(replayButton);
 
           lastEl.append(replayLink);
