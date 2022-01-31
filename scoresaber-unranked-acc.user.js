@@ -203,6 +203,26 @@
           bsrBtn.addEventListener('click', () => copyToClipboard(bsrBtn.title));
         }
 
+        // skip if replayBtn is already added
+        if (lastEl.querySelector('.replay')) return;
+
+        if (scores[idx].pp && scores[idx].rank <= 500) {
+          const link = `https://www.replay.beatleader.xyz/?id=${scores[idx].beatSaver.id}&difficulty=${scores[idx].beatSaver.diff.difficulty}&playerID=${params.playerId}`
+
+          const replayButton = window.document.createElement('button');
+          replayButton.title = 'Replay';
+          replayButton.className = `stat clickable bsr ${existingElClassName}`;
+
+          const icon = window.document.createElement('i');
+          icon.className = 'fas fa-play';
+          replayButton.append(icon);
+
+          const replayLink = window.document.createElement('a');
+          replayLink.href = link;
+          replayLink.prepend(replayButton);
+
+          lastEl.append(replayLink);
+        }
         // skip if acc stat is already added
         if (scoreInfoChilds?.length !== 1 || scoreInfoChilds[0].querySelector('.stat.acc')) return;
 
@@ -306,10 +326,12 @@
                 const baseScore = s?.score?.baseScore ?? null;
                 const modifiedScore = s?.score?.modifiedScore ?? null;
                 const multiplier = s?.score?.multiplier ?? null;
+                const pp = s?.score?.pp ?? null;
+                const rank = s?.score?.rank ?? null;
 
                 if (!hash || !difficulty || !baseScore || !modifiedScore || !multiplier) return null;
 
-                return {idx, hash, difficulty, baseScore, modifiedScore, maxScore, multiplier};
+                return {idx, hash, difficulty, baseScore, modifiedScore, maxScore, multiplier, pp, rank};
               })
               .filter(u => u)
 
