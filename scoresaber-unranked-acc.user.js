@@ -203,6 +203,28 @@
           bsrBtn.addEventListener('click', () => copyToClipboard(bsrBtn.title));
         }
 
+        // skip adding the beatSaverButton if it's already in there
+        if (!lastEl.querySelector('.beatsaver')){
+          if (scores?.[idx]?.beatSaver.id) {
+            const beatSaverMaplink = `https://beatsaver.com/maps/${scores[idx].beatSaver.id}`
+
+            const beatSaverButton = window.document.createElement('button');
+            beatSaverButton.title = 'BeatSaver';
+            beatSaverButton.className = `stat clickable ${existingElClassName}`;
+            beatSaverButton.innerHTML = "<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 200 200' version='1.1'><g fill='none' stroke='#000000' stroke-width='10'> <path d='M 100,7 189,47 100,87 12,47 Z' stroke-linejoin='round'/> <path d='M 189,47 189,155 100,196 12,155 12,47' stroke-linejoin='round'/> <path d='M 100,87 100,196' stroke-linejoin='round'/> <path d='M 26,77 85,106 53,130 Z' stroke-linejoin='round'/> </g> </svg>";
+            beatSaverButton.style.width = '30px';
+            beatSaverButton.style.height = '30px';
+            beatSaverButton.style.padding = '3.2px 0px';
+
+            const beatSaverButtonLink = window.document.createElement('a');
+            beatSaverButtonLink.href = beatSaverMaplink;
+            beatSaverButtonLink.target = "_blank";
+            beatSaverButtonLink.prepend(beatSaverButton);
+
+            lastEl.append(beatSaverButtonLink);
+          }
+        }
+
         // skip if replayBtn is already added
         if (lastEl.querySelector('.replay')) return;
 
