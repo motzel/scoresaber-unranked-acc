@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ScoreSaber unranked ACC
 // @namespace    https://motzel.dev
-// @version      0.3
+// @version      0.4
 // @description  ScoreSaber Enhancements
 // @author       motzel
 // @icon         https://scoresaber.com/favicon-32x32.png
@@ -284,7 +284,9 @@
 
       const beatSaver = {id: beatSaverObj[hash].id, bpm: beatSaverObj[hash].bpm};
 
-      const characteristic = s?.difficulty?.gameMode?.replace('Solo', '');
+      const characteristic = s?.difficulty?.gameMode
+        ?.replace('Solo', '')
+        ?.replace('OldDots', ''); // Support for https://github.com/PulseLane/FuckNewDots
       const difficulty = difficulties[s?.difficulty?.difficulty] ?? null;
 
       if (characteristic && difficulty) {
