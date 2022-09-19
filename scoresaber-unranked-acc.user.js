@@ -262,7 +262,9 @@
 
       const beatSaver = {id: beatSaverObj[hash].id, bpm: beatSaverObj[hash].bpm};
 
-      const characteristic = s?.difficulty?.gameMode?.replace('Solo', '');
+      const characteristic = s?.difficulty?.gameMode
+        ?.replace('Solo', '')
+        ?.replace('OldDots', ''); // Support for https://github.com/PulseLane/FuckNewDots
       const difficulty = difficulties[s?.difficulty?.difficulty] ?? null;
 
       if (characteristic && difficulty) {
