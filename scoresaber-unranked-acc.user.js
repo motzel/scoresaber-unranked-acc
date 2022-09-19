@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ScoreSaber unranked ACC
 // @namespace    https://motzel.dev
-// @version      0.3
+// @version      0.4
 // @description  ScoreSaber Enhancements
 // @author       motzel
 // @icon         https://scoresaber.com/favicon-32x32.png
